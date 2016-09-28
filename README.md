@@ -11,14 +11,14 @@ All presentations are written in HTML using [reveal.js](https://github.com/haiki
 
 To view these presentations on your local computer, follow these steps
 
-1. Clone this repository
+- Clone this repository
 
 `$ git clone https://github.com/brandonlmorris/presentations`
 
-2. Install the Node modules
+- Install the Node modules
 
 `$ npm install`
 
-3. Start the local server
+- Start the local server
 
 `$ npm start`
