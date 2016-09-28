@@ -1,0 +1,576 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/solarized.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <h1>Functional Programming in Scala</h1>
+          <span style="font-size: 60%">By Brandon Morris</span>
+        </section>
+
+        <!-- Intro to FP -->
+        <section>
+          <section>
+            <h2>What is Functional Programming?</h2>
+          </section>
+          <section>
+            <ul>
+              <li>Compose programs as collections of <strong><i>functions</i></strong></li>
+              <li>Origins in lambda calculus and category theory</li>
+              <li>Expression oriented</li>
+              <li>
+                Prioritize <strong>statelessness</strong> and <strong>immutability</strong>
+                <ul>
+                  <li>Once a value is set, it cannot change</li>
+                  <li>Functions are like black boxes: same input <strong>always</strong> yields
+                    the same result</li>
+                  <li>Allows for <strong>referential transparency</strong></li>
+                  <li>Where/when something executes doesn't affect how it executes</li>
+                </ul>
+              </li>
+            </ul>
+          </section>
+          <section>
+            <h3>State Example in Java</h3>
+            <pre><code>
+            public class Person {
+              public Person(String name, int age) {
+                this.name = name;
+                this.age = age;
+              }
+              public void makeOlder() {
+                this.age += 5;
+              }
+            }
+
+            // ...
+
+            Person p = new Person("Snoop Dog", 44)
+            System.out.println(p.age)
+            p.makeOlder()
+            System.out.println(p.age) // Same object, different state
+            </pre></code>
+          </section>
+          <section>
+            <h3>A more functional way</h3>
+            <pre><code>
+            public class Person {
+              public Person(String name, int age) {
+                this.name = name; this.age = age;
+              }
+
+              public Person makeOlder() {
+                // Create a new, older person
+                return new Person(this.name, this.age + 5);
+              }
+            }
+            </code></pre>
+            Instead of changing state, we create a new object
+          </section>
+          <section>
+            <h3>Ok...but why?</h3>
+            <!-- Insert gif here -->
+          </section>
+          <section>
+            <h3>Benefits of Stateless (Functional) Programming</h3>
+            <ul>
+              <li>We can reason about code much more effectively</li>
+              <li>
+                Immutability promotes flexibility
+                <ul>
+                  <li>Parallelize without locks</li>
+                  <li>Reuse existing objects to form new ones</li>
+                </ul>
+              </li>
+              <li>Programmers can think on a "higher level"</li>
+            </ul>
+          </section>
+        </section>
+
+        <!-- Intro to Scala -->
+        <section>
+          <section>
+            <h2>What is Scala?</h2>
+            <br>
+            <img src="./img/scala-logo.png">
+          </section>
+          <section>
+            <h2>The Scala Programming Language</h2>
+            <br>
+            <ul>
+              <li>Created in 2004 by Martin Odersky</li>
+              <li><i><strong>"Scalable" + "Language"</i></strong></li>
+              <li>Pronounced <i>skah-la</i> (sounds like <i>Java</i>)</li>
+              <li>Runs in the JVM
+                <ul><li>Has a surprising amount of interoperability with Java</li></ul>
+              </li>
+              <li>
+                Staticly typed, with a <strong>very</strong> strong type system
+                <ul><li>Designed with generics in mind, unlike Java</li></ul>
+              </li>
+              <li>Used at Twitter, LinkedIn, Alan Institute for AI</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Scala is <i>object oriented</i></h3>
+            <pre><code>
+            class Person(first: String, last: String) {
+              def sayHello() = {  // (Return type implied)
+                println(s"Hello, $first $last!")
+              }
+            }
+
+            val me = new Person("Brandon", "Morris")
+            me.sayHello
+
+            // > Hello, Brandon Morris!
+            </code></pre>
+          </section>
+          <section>
+            <h3>Scala is <i>functional</i></h3>
+            <pre><code>
+            Vector(1, 2, 3) foreach println
+            // > 1
+            // > 2
+            // > 3
+
+            val foo = (x: Int) => x * x  // Functions are values
+
+            (1 to 10).map(foo).reduceLeft(_ + _)
+            // > 385
+            </pre></code>
+          </section>
+          <section>
+            <h3>Scala plays nice with Java</h3>
+            <pre><code>
+            import scala.io.StdIn
+            import java.util.Scanner
+
+            val in = new Scanner(System.in)
+
+            val x = in.nextInt()    // Java-ish
+            val y = StdIn.readInt   // Scala
+
+            println(x + y)
+            </code></pre>
+          </section>
+        </section>
+
+        <!-- Start the Coding Tutorial -->
+        <section>
+          <section>
+            <h2>Let's Start Coding!</h2>
+          </section>
+          <section>
+            <h3>Get the Scala Compiler</h3>
+            <table style="width: 100%">
+              <tr>
+                <th>Platform</th>
+                <th>Install Command</th>
+              </tr>
+              <tr>
+                <td>macOS</td>
+                <td><pre><code>brew install scala # requires Homebrew</code></pre></td>
+              </tr>
+              <tr>
+                <td>Ubuntu</td>
+                <td><pre><code>sudo apt-get install scala</code></pre></td>
+              </tr>
+              <tr>
+                <td>Windows</td>
+                <td>Go to https://www.scala-lang.org/download/<td>
+              </tr>
+            </table>
+            <br>
+            There is also a Scala plugin for the IntelliJ IDE
+          </section>
+          <section>
+            You can compile <code>.scala</code> files with the command:
+            <pre><code>$ scalac MyScalaProg.scala</code></pre>
+
+            Then run with <code>scala</code>
+
+            <br><br>
+
+            Alternatively, you can just run the program ("skipping" compilation) with
+            <pre><code>$ scala MyScalaProg.scala</code></pre>
+          </section>
+          <section>
+            Scala also has a REPL*
+            <br>
+            This can be started with the command <code>scala</code> and is
+            great for messing around or trying out ideas
+
+            <br><br><br>
+            <span style="font-size: 40%">REPL stands for "Read, Evaluate, Print, Loop"</span>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Hello world!</h2>
+            <br>
+            <pre><code>
+            // In Hello.scala (or whatever you want)
+
+            object Hello {
+              def main(args: Array[String]): Unit = {
+                println("Hello, world!")
+              }
+            }
+            </code></pre>
+            Note: Scala public classes/objects <strong>don't</strong> have
+            to correspond with the file names.
+          </section>
+          <section>
+            <h3>Break it Down for Me</h3>
+            <br><br>
+            <pre><code>
+            object Hello {
+              ...
+            </code></pre>
+            An <code>object</code> is like a sinlgeton in Java
+            <br>
+            There is only one instnace, and it remains in memory (static)
+          </section>
+          <section>
+            <pre><code>
+              def main(args: Array[String]): Unit = {
+                ...
+            </code></pre>
+            <ul>
+              <li>Defines a <code>main</code> function</li>
+              <li>Takes one argument, and array of <code>String</code></li>
+              <li>Return type of <code>Unit</code>, similar to Java's <code>void</code></li>
+              <li>(Return types can often be omitted and figured out by the compiler, unless its recursive)</li>
+              <li>Note the `<code>=</code>`; since functions are values, they have to be assigned</li>
+            </ul>
+          </section>
+          <section>
+            <pre><code>
+            println("Hello, world!")
+            </code></pre>
+            Straightforward, just prints a string
+          </section>
+        </section>
+
+        <!-- val vs var -->
+        <section>
+          <section>
+            <h3>val vs var</h3>
+            In Scala, <strong>everything</strong> is an object
+            <br><br>
+            But we have two different types of object references:<br>
+            <ul>
+              <li><code>val</code></li>
+              <li><code>var</code></li>
+            </ul>
+          </section>
+          <section>
+            <h3>var</h3>
+            Short for variable, <code>var</code>'s are <strong>mutable</strong>
+            references to objects; they can change.
+            <pre><code>
+            var i = 0
+            while (i < 100) {
+              i += 1  // Reassignment perfectly legal
+            }
+            </code></pre>
+          </section>
+          <section>
+            <h3>val</h3>
+            <code>val</code>(ues), on the other hand, are <strong>immutable</strong>
+            references.
+            <br>
+            Once a value is assigned to an object, it cannot be assigned to
+            another object
+            <pre><code>
+            val x = 100
+            x = 101   // Causes an error
+            </code></pre>
+            <code>val</code>s are much more common when using Scala functionally
+          </section>
+          <section>
+            Note that the mutability is concerned with the <strong>reference</strong>,
+            not the object itself.
+            <br><br>
+            <code>val</code>'s can point to mutable objects, and <code>var</code>'s
+            to immutable objects
+          </section>
+          <section>
+            <h3>def</h3>
+            <code>def</code> is similar to <code>val</code> and <code>val</code>,
+            except that the assigned value is recomputed at each reference.
+            <br><br>
+            This makes them ideal (though not required) for functions
+
+            <pre><code>
+            def exclaim(s: String) = "!!!" + s + "!!!"
+
+            def lotsOfMuls() = 2 * 3 * 4 * 5 * 6 * 7 * 8
+
+            def myDefinition = "This should be a val"
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Now You Try!</h2>
+            Write a Scala program that will read a name and print out
+            "You're a Scala programmer, {{name}}!"
+          </section>
+          <section>
+            Let's do it together
+            <pre><code contenteditable style="height: 50em"></code></pre>
+          </section>
+          <section>
+            Hopefully, it looks something like this
+            <pre><code>
+            import scala.io.StdIn
+            object Main {
+              def main(args: Array[String]) = {
+                val name: String = StdIn.readLine()
+                println(progStr(name))
+              }
+
+              def progStr(n: String) = {
+                "You're a Scala programmer, " + n + "!"
+                // No return necessary
+              }
+            }
+            </code></pre>
+          </section>
+        </section>
+
+        <!-- Looping and tail recursion -->
+        <section>
+          <section>
+            <h3>Loop-de-loop</h3>
+            Scala has <code>while</code> loops, but no <code>for</code> loops*
+            <br><br>
+            <code>while</code> loops work fine, but they're inherently stateful.
+            <br><br>
+            We'll have to rely on other techniques in order to iterate
+
+            <br><br>
+            <span style="font-size:50%">
+              There are for <i>comprehensions</i>, but they're a little bit
+              different
+            </span>
+          </section>
+          <section>
+            <h3>Looping with functions</h3>
+            One way we can loop is to just apply a function over a list
+            <pre><code>
+            def printHi(x: Int) = println("Hi there")
+            val oneThroughTen = 1 to 10   // 1, 2, 3, ..., 10
+            oneThroughTen.foreach(printHi)
+            </pre></code>
+            Works, but not ideal
+          </section>
+          <section>
+            <h3>Looping with recursion</h3>
+            <pre><code>
+            def print10Times(s: String) = {
+              // Nested functions are smooth like jazz
+              def printNTimes(n: Int): Unit { // Return type required
+                println(s)  // Lexical scoping
+                if (n != 0) printNTimes(n - 1)
+                else () // Empty expression
+              }
+
+              printNTimes(10) // Call the inner function
+            }
+            </code></pre>
+          </section>
+          <section>
+            The Scala compiler will optimize for recursion, and we can ensure
+            this with an annotation
+            <pre><code>
+            def print10Times(s: String) = {
+              @scala.annotation.tailrec   // Compiler error if can't
+              def printNTimes(n: Int): Unit {
+                println(s)
+                if (n != 0) printNTimes(n - 1)
+                else ()
+              }
+
+              printNTimes(10)
+            }
+            </code></pre>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Now you try!</h2>
+            <br><br>
+            Write a Scala function that computes the factorial of some
+            number, N.
+
+            <br><br>
+            Bonus points if you can make it tail-recursive!
+
+            <br><br>
+            <span style="font-size:50%">The factorial of N is N * (N-1) * (N-2) * ... * 1</span>
+          </section>
+          <section>
+            Let's do it together
+            <pre><code contenteditable style="height: 50em"></code></pre>
+          </section>
+          <section>
+            <h3>Hopefully you got something like this</h3>
+            <pre><code>
+            def fact(n: Int): Int = {
+              @scala.annotation.tailrec
+              def fact(n: Int, current: Int): Int = {
+                if (n == 0) current
+                else fact(n - 1, current * n)
+              }
+              fact(n, 1)
+            }
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>A Quick Tour of Scala Collections</h2>
+          </section>
+          <section>
+            <h3>Lists</h3>
+            Lists are implemented as a singly linked list
+            <pre><code>
+            val l: List[Int] = 1 :: 2 :: 3 :: Nil
+            // > List(1, 2, 3)
+
+            // Indexed lookup, but O(n)
+            l(1) // 2
+
+            l :+ 4
+            // > List(1, 2, 3, 4)
+
+            0 +: l
+            // > List(0, 1, 2, 3)
+
+            </code></pre>
+          </section>
+          <section>
+            <h3>Vectors</h3>
+            Vectors are implemented as tries, and are the default indexible collection
+            <br>
+            Vectors share most of its methods with <code>List</code>
+            <pre><code>
+              val v = Vector(1, 2, 3)
+
+              v :+ 4 // Look familiar?
+              // > Vector[Int](1, 2, 3, 4)
+
+              // Shorthand creation
+              1 to 5
+              // > 1, 2, 3, 4, 5
+
+              1 until 5
+              // > 1, 2, 3, 4
+            </pre></code>
+            The Scala standard library will use <code>Vector</code> by default,
+            and you should too.
+          </section>
+          <section>
+            Certain functions work on any collection
+            <pre><code>
+            val v = Vector(1, 2, 3, 4, 5)
+
+            v map (_ + 5)   // Anonymous function
+            // > Vector(6, 7, 8, 9, 10)
+
+            v.reduceLeft(_ + _)
+            // > 15
+            // Works like ((1 + 2) + 3)
+
+            v.foldLeft(1)((a, b) => a * b)  // Currying
+            // > 120
+            </code></pre>
+          </section>
+          <section>
+            <h3>Maps</h3>
+            Hash maps, not to be confused with the <code>map</code> function
+            <pre><code>
+            val m = Map("1" -> 1, "2" -> 2, "3" -> 3)
+
+            // Like other collections, access by "applying"
+            m("2")
+            // > 2
+
+            // Since access is applying, we can actually map over
+            Vector("1", "3").map(m)
+            // > Vector(1, 3)
+
+            // Add elements (creates new map)
+            m + ("4" -> 4)
+            // > Map("1" -> 1, "2" -> 2, "3" -> 3, "4" -> 4)
+            </code></pre>
+          </section>
+          <section>
+            <h3>For Comprehensions</h3>
+            Very handy for iterating over collections and building up new ones
+            <pre><code>
+            for (i <- 1 to 10) {
+              println("This seems like a for loop...")
+            }
+
+            val v = Vector(1, 2, 3, 4, 5)
+            for (i <- v) yield i * i
+            // > Vector(1, 4, 9, 16, 25)
+
+            for (i <- 1 to 10;
+                 j <- i to i * 2
+                 if j == 19) yield Vector(i, j)
+            // > Vector(Vector(10, 19))
+            </code></pre>
+            Really just syntactic sugar for <code>map</code> and other functions
+          </section>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        history: true,
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
