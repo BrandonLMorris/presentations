@@ -1,0 +1,729 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Machine Learning</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/solarized.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <h1>Machine Learning</h1>
+          <br><br><br>
+          <span style="font-size:33%">Made by Brandon Morris</span>
+        </section>
+        <section>
+          <section>
+            <h2>What is Machine Learning?</h2>
+            <br><br>
+            <q>"[Machine learning] gives computers the ability to learn
+              without being explicitly programmed" -Arthur Samuel</q>
+            <br><br>
+            A method of programming that allows algorithms to gather information
+            (i.e. <i>learn</i>) from data.
+            <br><br>
+            Algorithms that improve at a task ($T$) given experience ($E$)
+          </section>
+          <section>
+            <h3>Super powerful, tons of applications</h3>
+            <ul style="float=left">
+              <li>Unmanned beer deliveries</li>
+              <li>Chess and Go champions</li>
+              <li>Speech recognition</li>
+              <li>Medical diagnosis</li>
+              <li>Recommender systems</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>The Flavors of Machine Learning</h2>
+            <ul>
+              <li>Supervised Learning</li>
+              <li>Unsupervised Learning</li>
+              <li>Reinforcement Learning</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Supervised Learning</h2>
+            Our data has an "answer" or label associated with it
+            <br><br>
+            Goal is to predict that value for new data
+          </section>
+
+          <section>
+            <h3>Two Forms of Supervised Learning</h3>
+            <ul>
+              <li>
+                <strong>Regression</strong>: Labels are continuous
+                <ul><li>Given the square footage of a house, what price will it sell for?</li></ul>
+              </li>
+              <br>
+              <li>
+                <strong>Classification</strong>: Labels are discrete
+                <ul><li>Given a picture of a tumor, is it benign or not?</li></ul>
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Examples of Supervised Learning</h2>
+            <ul>
+              <li><q>Which chess move will most likely lead to a winning game?</q></li>
+              <li><q>Was this email written by Bob or Alice?</q></li>
+              <li><q>How much will this house sell for if it has $X$ square feet?</q></li>
+            </ul>
+          </section>
+          <section>
+            <h2>Common Supervised Learning Algorithms</h2>
+            <ul>
+              <li>Linear regression*</li>
+              <li>Logisitic regression</li>
+              <li>Support Vector Machines (SVM)</li>
+              <li>Artificial Neural Networks**</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Unsupervised Learning</h2>
+            Don't exactly know what we're looking for
+            <br><br>
+            Algorithms try to describe structure from unlabeled data
+          </section>
+          <section>
+            <h2>Examples of Unsupervised Learning</h2>
+            <ul>
+              <li><q>What kind of shows would someone who watches "Game of Thrones" like?</q></li>
+              <li><q>Is this financial transaction fraudulent or legitimate?</q></li>
+            </ul>
+          </section>
+          <section>
+            Unsupervised learning typically takes the form of clustering
+            <br><br>
+            We'll look a <strong>K-Means</strong> clustering specifically
+          </section>
+
+          <section>
+            <h2>Reinforcement Learning</h2>
+            Algorithm works to achieve (or make progress toward) some goal
+            <br><br>
+            Make decision, reward/punish, repeat
+            <br><br>
+            Dynamic data set; interacts with the environment
+            <br><br>
+            Useful in robotics
+          </section>
+        </section>
+
+
+        <!-- Begin Linear Regression Section -->
+        <section>
+          <section>
+            <h2>Linear Regression with Gradient Descent</h2>
+          </section>
+
+          <section>
+            <h3>Roadmap</h3>
+            Intuition and Mathematical Basis
+            <br><br>
+            Naive Implementation
+            <br><br>
+            Scikit-learn Implementation
+          </section>
+        </section>
+
+
+        <section>
+          <section>
+            <h2>Problem Description</h2>
+            <br>
+            <div>
+              <span style="float:left; width: 45%">
+                <strong>Goal</strong>
+                <br>
+                Create a "model" that can reasonably predict
+                new values of this dataset (find a new $y$ given a new $x$)
+              </span>
+              <span style="float:right; width: 45%"><img src='ml-img/initial-data.png'></span>
+            </div>
+          </section>
+          <section>
+            <h2>Linear Regression</h2>
+            The data clearly takes a linear form
+            <br><br>
+            Recall the <i>point-slope</i> equation for lines:
+            <br>
+            $y = b + mx$
+            <br><br>
+            We can rewrite with some different symbols:
+            <br>
+            $h_\theta(x) = \theta_0 + \theta_1x$
+          </section>
+          <section>
+            $h_\theta$ is our <strong>hypothesis</strong> or prediction function
+            <br><br>
+            Plug a new $x$ into our hypothesis, we get its associated $y$
+          </section>
+          <section>
+            <h2>Parameterization</h2>
+            The resulting line is determined by two parameters: $\theta_0$ and $\theta_1$
+            <br><br>
+            <div style="width: 45%; float: left">
+              $\theta_0$ determines where the line sits vertically
+              <br><br><br><br>
+              $\theta_1$ determines the slope of the line
+            </div>
+            <div style="width: 45%; float: right">
+              <img src='ml-img/diff-intercept.png' style="width: 67%">
+              <br>
+              <img src='ml-img/diff-slope.png' style="width: 67%">
+            </div>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h3>New Goal</h3>
+            <br>
+            Find the values of the parameters ($\theta_0$ and $\theta_1$) that
+            forms the equation of a line that best "fits" our data.
+          </section>
+          <section>
+            <h2>Fits?</h2>
+            What makes a line "fit" to the data better or worse?
+            <br><br>
+            How can we measure fit empirically?
+          </section>
+          <section>
+            <h2>The Cost Function</h2>
+            "Error" or "Loss" function
+            <br><br>
+            Numeric value of how "wrong" our model is for a data set
+            <br><br>
+            Many exist, usually based on distance from prediction and actual value
+          </section>
+          <section>
+            <h2>Sum of Squares Cost Function</h2>
+            <div style="width:45%; float:left">
+            Find the distance between the predicted and actual value
+            <br><br>
+            Square it, and sum for all data points
+            <br><br>
+            </div>
+            <div style="width:45%; float:right">
+              <img src="ml-img/cost-example.png" style="width:75%">
+            </div>
+            <div style="clear:left">
+            Mathematically:
+            <br>
+            $J(\theta_0, \theta_1) = \frac{1}{2N}\sum_{n=1}^{N}(h_\theta(x_n) - y_n)^2$
+            <br><br>
+            (we also normalize and divide by 2)
+            </div>
+          </section>
+          <section>
+            Now we have a way to "grade" our hypothesis function (model)
+            <br>
+            $h_\theta(x) = \theta_0 + \theta_1x$
+            <br><br>
+            Low cost function $\implies$ Good parameters
+            <br>
+            High cost function $\implies$ Bad parameters
+          </section>
+          <section>
+            <h3>New Goal (again)</h3>
+            Find the values of the parameters ($\theta_0$, $\theta_1$) that
+            minimizes the cost function $J(\theta_0, \theta_1)$.
+            <br><br>
+            Or as an optimization problem:
+            <br>
+            $\min\limits_{\theta_0, \theta_1}J(\theta_0, \theta_1)$
+          </section>
+        </section>
+
+        <!-- Begin Gradient Descent section -->
+        <section>
+          <section>
+            <h2>Gradient Descent Optimization</h2>
+          </section>
+          <section>
+            <h3>Basic Idea</h3>
+            <div style="width: 45%; float:left">
+              The key to gradient descent comes from the <strong>shape</strong>
+              of the cost function
+              <br><br>
+              If we start anywhere and move "downward", we eventually reach the
+              minimum
+            </div>
+            <div style="width:45%; float:right">
+              <img src="ml-img/quadratic-cost.png">
+              <br>
+              <span style="font-size:67%">(Two deminsional "slice" of our cost function)</span>
+            </div>
+          </section>
+          <section>
+            "Downward" can be determined by the derivative
+            <br><br>
+            Since we have multiple parameters, we'll have to take the directional
+            (partial) derivatives with respect to each parameter
+            <br><br>
+            This will give us the direction we need to adjust a parameter in
+            order to decrease the cost caused by that parameter
+          </section>
+          <section>
+            By repeatedly taking steps in the direction of the minimum, it's
+            like we're walking down the side of a hill
+            <br><br>
+            Eventually, we'll reach the minimum (bottom)
+          </section>
+          <section>
+            <h3>The Algorithm</h3>
+            <div style="text-align:left;">
+            $\theta_0, \theta_1 := 0$<br>
+            Repeat until convergence: {<br>
+            &emsp;for $j=0\dots m$ {<br>
+            &emsp;&emsp;$\theta_j := \theta_j - \alpha \frac{\partial}{\partial\theta_j}J(\theta_0, \theta_1)$<br>
+            &emsp;}<br>
+            }
+            </div>
+          </section>
+          <section>
+            <h3>Some Notes</h3>
+            Convergence is something we define (usually when cost stops decreasing)
+            <br><br>
+            $m$ is the number of parameters (in our case, 2)
+            <br><br>
+            $\alpha$ is the <strong>learning rate</strong>; determines the step
+            size.
+          </section>
+          <section>
+            <h3>A Little More about $\alpha$</h3>
+            $\alpha$ determines how big of a step we take during each iteration
+            <br><br>
+            If $\alpha$ is too big, we'll jump over the minimum and possibly diverge
+            <br><br>
+            If $\alpha$ is too small, we'll never reach the actual minimum
+            <br><br>
+            Example of a <strong>hyperparameter</strong>: it effects training,
+            but isn't a value that's learned as part of training
+          </section>
+          <section>
+            <h2>The Partial Derivative</h2>
+            Omitting the calculus, the partial of the cost function is
+            <br>
+            $\frac{\partial}{\partial\theta_j}J(\theta_0,\theta_1) =
+            \frac{1}{N}\sum_{n=1}^{N}[(h_\theta(x_n) - y_n) * x_{n,j}]$
+            <br><br>
+            Where $x_{n,j}$ is the $j$th input value of the $n$th training example
+            <br>
+            (Note that for all $n$, $x_{n,0} = 1$)
+          </section>
+        </section>
+
+        <!-- Begin implementation section -->
+        <section>
+          <section>
+            <h2>Naive Implementation</h2>
+          </section>
+          <section>
+            <h3>The Set Up</h3>
+            Same problem statement and data
+            <br><br>
+            Python 3 implementation of previously discussed equations
+          </section>
+          <section>
+            Assume that we have two lists: <code>X</code> and <code>Y</code>
+            <br><br>
+            Also have two sets of (disjoint) sublists: <code>X_train</code>, <code>Y_train</code>,
+            <code>X_test</code>, and <code>Y_test</code>
+          </section>
+          <section>
+            <h3>Training vs Testing</h3>
+            It is <strong><i>critical</i></strong> that we keep different sets
+            for training (determining the parameter values) and testing (asserting
+            the effectiveness of our model)
+            <br><br>
+            We want our model to work well on data that it's never seen before,
+            so we <strong>cannot test with training data</strong>
+          </section>
+          <section>
+            <h3>The Hypothesis Function</h3>
+            <pre><code>
+            def hypothesis(theta0, theta1, x):
+                return theta0 + (theta1 * x)
+            </code></pre>
+            $h_\theta(x) = \theta_0 + \theta_1x$
+          </section>
+          <section>
+            <h3>The Cost Function</h3>
+            <pre><code>
+            def cost(theta0, theta1, X, Y):
+                errors = [hypothesis(x) - y for (x, y) in zip(X, Y)]
+                squared = [i * i for i in errors]
+                return 1 / (2 * len(X)) * sum(squared)
+            </code></pre>
+            $J(\theta_0, \theta_1) = \frac{1}{2N}\sum_{n=1}^{N}(h_\theta(x_n) - y_n)^2$
+          </section>
+          <section>
+            <h3>The Descent Function</h3>
+            <pre style="text-align:left"><code style="text-align:left">
+            def descend(t0, t1, X, Y):
+                xy = zip(X, Y)
+                N = len(X)
+
+                # Calculate partial wrt theta0
+                p0 = [hypothesis(t0, t1, x) - y for (x, y) in xy]
+                p0 = (1 / N) * sum(p0)
+
+                # Calculate partial wrt theta1
+                p1 = [(hypothesis(t0, t1, x) - y) * x for (x, y) in xy]
+                p1 = (1 / N) * sum(p1)
+
+                new_t0 = t0 - LEARNING_RATE * p0
+                new_t1 = t1 - LEARNING_RATE * p1
+                return (new_t0, new_t1)
+            </code></pre>
+            $\theta_j := \theta_j - \alpha \frac{\partial}{\partial\theta_j}J(\theta_0, \theta_1)$
+            <br>where
+            $\frac{\partial}{\partial\theta_j}J(\theta_0,\theta_1) =
+            \frac{1}{N}\sum_{n=1}^{N}[(h_\theta(x_n) - y_n) * x_{n,j}]$
+          </section>
+          <section>
+            <h3>The Main Function</h3>
+            <pre><code>
+            def main():
+                # ...data generation omitted...
+                theta0, theta1 = 0, 0
+                old_cost = cost(theta0, theta1, X_train, Y_train)
+
+                while True:
+                    theta0, theta1 = descend(theta0, theta1,
+                                             X_train, Y_train)
+                    new_cost = cost(theta0, theta1, X_train, Y_train)
+
+                    # Check for convergence
+                    if abs(new_cost - old_cost) > EPSILON:
+                        break
+                    else:
+                        old_cost = new_cost
+            </code></pre>
+          </section>
+          <section>
+            <h3>Bonus: Plot our line</h3>
+            <pre><code>
+            def graph(t0, t1, X, Y):
+                # using matplotlib.pyplot
+                pyplot.plot(X, Y, color='r.')
+                pyplot.plot(X, [hypothesis(t0, t1, x) for x in X])
+                pyplot.show()
+            </code></pre>
+          </section>
+          <section>
+            <h3>Bonus: Evaluate our Model</h3>
+            <pre><code>
+            def r_squared(t0, t1, X, Y):
+                Yp = [hypothesis(t0, t1, x) for y in Y]
+                u = sum([(yp - yt)**2 for (yp, yt) in zip(Yp, Y)])
+                mean = sum(Y) / len(Y_true)
+                v = sum([(y - mean)**2 for y in Y])
+                return (1 - (u / v))
+            </pre></code>
+            The $R^2$ statstical evaluation function
+            <br>
+            The closer to 1.0, the better
+          </section>
+        </section>
+
+        <!-- Begin Scikit-Learn Implementation -->
+        <section>
+          <section>
+            <h2>Now with Scikit-Learn</h2>
+            <br><br>
+            <span style="font-size:50%">And 100% less math</span>
+          </section>
+          <section>
+            <h3>The Whole Enchilada</h3>
+            <pre><code>
+            from sklearn.linear_model import LinearRegression
+            from numpy import array
+
+            # Transform X and Y to numpy vectors
+            X_train = array(X_train).reshape(-1, 1)
+            Y_train = array(Y_train).reshape(-1, 1)
+
+            # Perform the actual training
+            lr = LinearRegression()
+            lr.fit(X_train, Y_train)
+
+            # Predict and evaluate
+            y_15 = lr.predict(15)
+            r_squared = lr.score(X_test, Y_test) # must be vectors
+            params = lr.get_params()
+            </code></pre>
+          </section>
+          <section>
+            <h3>Results</h3>
+            <img src="ml-img/results.png" style="width:55%">
+            <br>
+            $\alpha$ of 0.0003
+            <br>
+            ~25,000 iterations to converge (&lt;3sec)
+            <br>
+            $R^2$ of 0.9980 (sklearn scored 0.9979)
+          </section>
+          <section>
+            <h2>Pros and Cons of Gradient Descent</h2>
+            <div style="width:45%; float:left">
+              <h4>Pros</h4>
+              Easy to understand / implement
+              <br><br>
+              Reasonably fast
+              <br><br>
+              Widely used
+            </div>
+            <div style="width:45%; float:right">
+              <h4>Cons</h4>
+              Does not work with non-linear data (XOR)
+              <br><br>
+              Cost function must be convex
+              <br><br>
+              Can be skewed by outliers
+            </div>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>K-Means Clustering</h2>
+            Classic clustering algorithm
+            <br><br>
+            Form of unsupervised learning
+          </section>
+          <section>
+            <h3>The Problem Statement</h3>
+            <div style="width:35%;float:left">
+              Say we have some data that naturally groups in some way
+              <br><br>
+              We want to find these groups and classify the data points
+            </div>
+            <div style="width:55%;float:right">
+              <img src="ml-img/k-means-initial.png">
+            </div>
+          </section>
+          <section>
+            <h3>Intuition</h3>
+            Define some "centers" (initially random)
+            <br><br>
+            Repeatedly move these centers closer and closer to the centers
+            of the actual data
+            <br><br>
+            Repeat two phases: <strong>assingnment</strong> and
+            <strong>adjustment</strong> until convergence
+          </section>
+          <section>
+            <h3>Assignment</h3>
+            Loop over every data point
+            <br><br>
+            Assign it to the center that's "closest" to it
+            <br><br>
+            We'll use Euclidean distance
+            <br>
+            $\sqrt{(x_1 - x_2)^2 - (y_1 - y_2)^2}$
+          </section>
+          <section>
+            <h3>Adjustment</h3>
+            Move each center to the average position of its assinged data points
+            <br><br>
+            We can do this for $x$ and $y$ independently for each center
+          </section>
+          <section>
+            <h3>And that's it</h3>
+            We can repeat <strong>assignment</strong> and
+            <strong>adjustment</strong> until the centers stop moving by any
+            significant amount
+            <br><br>
+            No derivatives or fancy equations
+          </section>
+          <section>
+            <h3>The Hyperparameter $k$</h3>
+            The number of clusters, $k$, has to be set prior to training
+            <br><br>
+            This is easy when we can visualize the data, but can be tricky for
+            more complex problems
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Naive Implementation</h2>
+          </section>
+          <section>
+            <h3>The Setup</h3>
+            Same data as on the previous slide
+            <br><br>
+            Again, assume we have <code>X</code> and <code>Y</code> lists
+            <br><br>
+            <strong>Note</strong>: We're <i>not</i> dividing into training/test sets since
+            we're not going to be making predictions
+            <br><br>
+            We could make predicitons, but would need a different (supervised)
+            algorithm like K-Nearest Neighbor
+          </section>
+          <section>
+            <h3>The Assign Method</h3>
+            <pre><code>
+            def assign(X, Y, centers):
+                # nearests[i] are points closest to center i
+                nearests = [list() for c in centers]
+                for (x, y) in zip(X, Y):
+                    # calculate dist from each center
+                    dists = list()
+                    for c in centers:
+                        xdiff = (x - c[0]) ** 2
+                        ydiff = (y - c[1]) ** 2
+                        dists.append(math.sqrt(xdiff + ydiff))
+
+                    # assign to center with minimum distance
+                    index = dists.index(min(dists))
+                    nearests[index].append((x, y))
+                return nearests
+            </code></pre>
+          </section>
+          <section>
+            <h3>The Adjust Method</h3>
+            <pre><code>
+            def adjust(center, neighbors):
+                if len(neighbors) == 0: return center
+                # Watch out for overflow...
+                avg_x = sum(n[0] for n in neighbors) / len(neighbors)
+                avg_y = sum(n[1] for n in neighbors) / len(neighbors)
+                return (avg_x, avg_y)
+            </code></pre>
+          </section>
+          <section>
+            <h3>The Main Method</h3>
+            <pre><code>
+            def main():
+                # ...omitting data gathering...
+
+                centers = [(randint(0, 100), randint(0, 100))
+                           for i in range(3)]
+                while True:
+                    neighbors = assign(X, Y, centers)
+                    new_centers = [adjust(c, n)
+                                  for (c, n) in zip(centers, neighbors)]
+                    # Stop if converged
+                    if all([abs(n[0] - c[0]) &lt; EPSILON and
+                            abs(n[1] - c[1]) &lt; EPSILON
+                            for (n, c) in zip(new_centers, centers)]):
+                        break
+                    else:
+                        centers = new_centers
+            </code></pre>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h2>Results</h2>
+            <h3>Starting Data Set</h3>
+            <img src="ml-img/k-means-initial.png" style="width:66%">
+          </section>
+          <section>
+            <h3>Initial Centers</h3>
+            <img src="ml-img/k-means-st0.png" style="width:66%">
+          </section>
+          <section>
+            <h3>Adjust #1</h3>
+            <img src="ml-img/k-means-st1.png" style="width:66%">
+          </section>
+          <section>
+            <h3>Adjust #2 (Final)</h3>
+            <img src="ml-img/k-means-st2.png" style="width:66%">
+            <br>
+            Not too shabby
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>Where to Go from Here</h2>
+          </section>
+          <section>
+            <h3>Improvements</h3>
+            More complex data (higher dimensions)
+            <br><br>
+            Model selection with a validation set
+            <br><br>
+            Vectorize our $x$, $\theta$, and $y$ values
+            <br><br>
+            Add regularization to improve generality
+            <br><br>
+            Find more training examples*
+          </section>
+          <section>
+            <h3>Similar Topics</h3>
+            Logistic Regression and Support Vector Machines
+            <br><br>
+            Artificial Neural Networks and Backpropagation
+            <br><br>
+            Deep Learning
+          </section>
+          <section>
+            <h3>Further Study</h3>
+            <strong>Coursera Machine Learning (Andrew Ng)**</strong>
+            <br><br>
+            <i>Pattern Recognition and Machine Learning</i> by Christopher Bishop
+            <br><br>
+            <i>Deep Learning</i> by Ian Goodfellow, Yoshua Bengio, and Aaron Courville
+          </section>
+        </section>
+
+        <section>
+          <h2>Questions?</h2>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+      // More info https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        history: true,
+
+        math: {
+          mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+          config: 'TeX-AMS_HTML-full'
+        },
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+          { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/math/math.js' },
+          { src: 'plugin/markdown/markdown.js' },
+          { src: 'plugin/notes/notes.js', async: true },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>

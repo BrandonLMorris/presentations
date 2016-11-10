@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>reveal.js</title>
+    <title>Brandon Morris Presentations</title>
 
     <link rel="stylesheet" href="css/reveal.css">
     <link rel="stylesheet" href="css/theme/black.css">
@@ -33,6 +33,7 @@
           that I think are interesting. Topics (will) include:
           <ul>
             <li><a href="scala.html">Functional Programming in Scala</a></li>
+            <li><a href="ml.html">Introduction to Machine Learning</a></li>
             <li>Containerization in Docker</li>
             <li>Vim: Edit at the Speed of Thought
               <ul>
@@ -49,6 +50,13 @@
           <section></section>
           <section>Pretty cool, right?</section>
         </section>
+
+        <section>
+          Let's get mathy!
+
+          <br><br>
+          $\sum_{n=1}^{N}\theta^2_n$
+        </section>
       </div>
     </div>
 
@@ -60,9 +68,15 @@
       Reveal.initialize({
         history: true,
 
+        math: {
+          mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+          config: 'TeX-AMS_HTML-full'
+        },
+
         // More info https://github.com/hakimel/reveal.js#dependencies
         dependencies: [
           { src: 'plugin/markdown/marked.js' },
+          { src: 'plugin/math/math.js' },
           { src: 'plugin/markdown/markdown.js' },
           { src: 'plugin/notes/notes.js', async: true },
           { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
