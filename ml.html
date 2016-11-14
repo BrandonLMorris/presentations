@@ -7,7 +7,7 @@
     <title>Machine Learning</title>
 
     <link rel="stylesheet" href="css/reveal.css">
-    <link rel="stylesheet" href="css/theme/solarized.css">
+    <link rel="stylesheet" href="css/theme/black.css">
 
     <!-- Theme used for syntax highlighting of code -->
     <link rel="stylesheet" href="lib/css/zenburn.css">
@@ -25,8 +25,12 @@
     <div class="reveal">
       <div class="slides">
         <section>
+          <!--
           <h1>Machine Learning</h1>
           <br><br><br>
+          -->
+          <img src="ml-img/machine-learning.png">
+          <br>
           <span style="font-size:33%">Made by Brandon Morris</span>
         </section>
         <section>
@@ -169,7 +173,7 @@
             <h2>Linear Regression</h2>
             The data clearly takes a linear form
             <br><br>
-            Recall the <i>point-slope</i> equation for lines:
+            Recall the <i>slope-intercept</i> equation for lines:
             <br>
             $y = b + mx$
             <br><br>
@@ -185,7 +189,7 @@
           <section>
             <h2>Parameterization</h2>
             The resulting line is determined by two parameters: $\theta_0$ and $\theta_1$
-            <br><br>
+            <br>
             <div style="width: 45%; float: left">
               $\theta_0$ determines where the line sits vertically
               <br><br><br><br>
@@ -375,9 +379,9 @@
           <section>
             <h3>The Cost Function</h3>
             <pre><code>
-            def cost(theta0, theta1, X, Y):
-                errors = [hypothesis(x) - y for (x, y) in zip(X, Y)]
-                squared = [i * i for i in errors]
+            def cost(t0, t1, X, Y):
+                e = [hypothesis(t0, t1, x) - y for (x, y) in zip(X, Y)]
+                squared = [i * i for i in e]
                 return 1 / (2 * len(X)) * sum(squared)
             </code></pre>
             $J(\theta_0, \theta_1) = \frac{1}{2N}\sum_{n=1}^{N}(h_\theta(x_n) - y_n)^2$
