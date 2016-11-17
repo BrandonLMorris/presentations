@@ -374,39 +374,39 @@
           <section>
             <h3>The Hypothesis Function</h3>
             <pre><code>
-            def hypothesis(theta0, theta1, x):
-                return theta0 + (theta1 * x)
+def hypothesis(theta0, theta1, x):
+    return theta0 + (theta1 * x)
             </code></pre>
             $h_\theta(x) = \theta_0 + \theta_1x$
           </section>
           <section>
             <h3>The Cost Function</h3>
             <pre><code>
-            def cost(t0, t1, X, Y):
-                e = [hypothesis(t0, t1, x) - y for (x, y) in zip(X, Y)]
-                squared = [i * i for i in e]
-                return 1 / (2 * len(X)) * sum(squared)
+def cost(t0, t1, X, Y):
+    e = [hypothesis(t0, t1, x) - y for (x, y) in zip(X, Y)]
+    squared = [i * i for i in e]
+    return 1 / (2 * len(X)) * sum(squared)
             </code></pre>
             $J(\theta_0, \theta_1) = \frac{1}{2N}\sum_{n=1}^{N}(h_\theta(x_n) - y_n)^2$
           </section>
           <section>
             <h3>The Descent Function</h3>
-            <pre style="text-align:left"><code style="text-align:left">
-            def descend(t0, t1, X, Y):
-                xy = zip(X, Y)
-                N = len(X)
+            <pre><code>
+def descend(t0, t1, X, Y):
+    xy = zip(X, Y)
+    N = len(X)
 
-                # Calculate partial wrt theta0
-                p0 = [hypothesis(t0, t1, x) - y for (x, y) in xy]
-                p0 = (1 / N) * sum(p0)
+    # Calculate partial wrt theta0
+    p0 = [hypothesis(t0, t1, x) - y for (x, y) in xy]
+    p0 = (1 / N) * sum(p0)
 
-                # Calculate partial wrt theta1
-                p1 = [(hypothesis(t0, t1, x) - y) * x for (x, y) in xy]
-                p1 = (1 / N) * sum(p1)
+    # Calculate partial wrt theta1
+    p1 = [(hypothesis(t0, t1, x) - y) * x for (x, y) in xy]
+    p1 = (1 / N) * sum(p1)
 
-                new_t0 = t0 - LEARNING_RATE * p0
-                new_t1 = t1 - LEARNING_RATE * p1
-                return (new_t0, new_t1)
+    new_t0 = t0 - LEARNING_RATE * p0
+    new_t1 = t1 - LEARNING_RATE * p1
+    return (new_t0, new_t1)
             </code></pre>
             $\theta_j := \theta_j - \alpha \frac{\partial}{\partial\theta_j}J(\theta_0, \theta_1)$
             <br>where
@@ -416,42 +416,42 @@
           <section>
             <h3>The Main Function</h3>
             <pre><code>
-            def main():
-                # ...data generation omitted...
-                theta0, theta1 = 0, 0
-                old_cost = cost(theta0, theta1, X_train, Y_train)
+def main():
+    # ...data generation omitted...
+    theta0, theta1 = 0, 0
+    old_cost = cost(theta0, theta1, X_train, Y_train)
 
-                while True:
-                    theta0, theta1 = descend(theta0, theta1,
-                                             X_train, Y_train)
-                    new_cost = cost(theta0, theta1, X_train, Y_train)
+    while True:
+        theta0, theta1 = descend(theta0, theta1,
+                                 X_train, Y_train)
+        new_cost = cost(theta0, theta1, X_train, Y_train)
 
-                    # Check for convergence
-                    if abs(new_cost - old_cost) > EPSILON:
-                        break
-                    else:
-                        old_cost = new_cost
+        # Check for convergence
+        if abs(new_cost - old_cost) > EPSILON:
+            break
+        else:
+            old_cost = new_cost
             </code></pre>
           </section>
           <section>
             <h3>Bonus: Plot our line</h3>
             <pre><code>
-            def graph(t0, t1, X, Y):
-                # using matplotlib.pyplot
-                pyplot.plot(X, Y, color='r.')
-                pyplot.plot(X, [hypothesis(t0, t1, x) for x in X])
-                pyplot.show()
+def graph(t0, t1, X, Y):
+    # using matplotlib.pyplot
+    pyplot.plot(X, Y, color='r.')
+    pyplot.plot(X, [hypothesis(t0, t1, x) for x in X])
+    pyplot.show()
             </code></pre>
           </section>
           <section>
             <h3>Bonus: Evaluate our Model</h3>
             <pre><code>
-            def r_squared(t0, t1, X, Y):
-                Yp = [hypothesis(t0, t1, x) for y in Y]
-                u = sum([(yp - yt)**2 for (yp, yt) in zip(Yp, Y)])
-                mean = sum(Y) / len(Y_true)
-                v = sum([(y - mean)**2 for y in Y])
-                return (1 - (u / v))
+def r_squared(t0, t1, X, Y):
+    Yp = [hypothesis(t0, t1, x) for y in Y]
+    u = sum([(yp - yt)**2 for (yp, yt) in zip(Yp, Y)])
+    mean = sum(Y) / len(Y_true)
+    v = sum([(y - mean)**2 for y in Y])
+    return (1 - (u / v))
             </pre></code>
             The $R^2$ statstical evaluation function
             <br>
@@ -469,21 +469,21 @@
           <section>
             <h3>The Whole Enchilada</h3>
             <pre><code>
-            from sklearn.linear_model import LinearRegression
-            from numpy import array
+from sklearn.linear_model import LinearRegression
+from numpy import array
 
-            # Transform X and Y to numpy vectors
-            X_train = array(X_train).reshape(-1, 1)
-            Y_train = array(Y_train).reshape(-1, 1)
+# Transform X and Y to numpy vectors
+X_train = array(X_train).reshape(-1, 1)
+Y_train = array(Y_train).reshape(-1, 1)
 
-            # Perform the actual training
-            lr = LinearRegression()
-            lr.fit(X_train, Y_train)
+# Perform the actual training
+lr = LinearRegression()
+lr.fit(X_train, Y_train)
 
-            # Predict and evaluate
-            y_15 = lr.predict(15)
-            r_squared = lr.score(X_test, Y_test) # must be vectors
-            params = lr.get_params()
+# Predict and evaluate
+y_15 = lr.predict(15)
+r_squared = lr.score(X_test, Y_test) # must be vectors
+params = lr.get_params()
             </code></pre>
           </section>
           <section>
@@ -597,53 +597,52 @@
           <section>
             <h3>The Assign Method</h3>
             <pre><code>
-            def assign(X, Y, centers):
-                # nearests[i] are points closest to center i
-                nearests = [list() for c in centers]
-                for (x, y) in zip(X, Y):
-                    # calculate dist from each center
-                    dists = list()
-                    for c in centers:
-                        xdiff = (x - c[0]) ** 2
-                        ydiff = (y - c[1]) ** 2
-                        dists.append(math.sqrt(xdiff + ydiff))
+def assign(X, Y, centers):
+    # nearests[i] are points closest to center i
+    nearests = [list() for c in centers]
+    for (x, y) in zip(X, Y):
+        # calculate dist from each center
+        dists = list()
+        for c in centers:
+            xdiff = (x - c[0]) ** 2
+            ydiff = (y - c[1]) ** 2
+            dists.append(math.sqrt(xdiff + ydiff))
 
-                    # assign to center with minimum distance
-                    index = dists.index(min(dists))
-                    nearests[index].append((x, y))
-                return nearests
+        # assign to center with minimum distance
+        index = dists.index(min(dists))
+        nearests[index].append((x, y))
+    return nearests
             </code></pre>
           </section>
           <section>
             <h3>The Adjust Method</h3>
             <pre><code>
-            def adjust(center, neighbors):
-                if len(neighbors) == 0: return center
-                # Watch out for overflow...
-                avg_x = sum(n[0] for n in neighbors) / len(neighbors)
-                avg_y = sum(n[1] for n in neighbors) / len(neighbors)
-                return (avg_x, avg_y)
+def adjust(center, neighbors):
+    if len(neighbors) == 0: return center
+    # Watch out for overflow...
+    avg_x = sum(n[0] for n in neighbors) / len(neighbors)
+    avg_y = sum(n[1] for n in neighbors) / len(neighbors)
+    return (avg_x, avg_y)
             </code></pre>
           </section>
           <section>
             <h3>The Main Method</h3>
             <pre><code>
-            def main():
-                # ...omitting data gathering...
-
-                centers = [(randint(0, 100), randint(0, 100))
-                           for i in range(3)]
-                while True:
-                    neighbors = assign(X, Y, centers)
-                    new_centers = [adjust(c, n)
-                                  for (c, n) in zip(centers, neighbors)]
-                    # Stop if converged
-                    if all([abs(n[0] - c[0]) &lt; EPSILON and
-                            abs(n[1] - c[1]) &lt; EPSILON
-                            for (n, c) in zip(new_centers, centers)]):
-                        break
-                    else:
-                        centers = new_centers
+def main():
+    # ...omitting data gathering...
+    centers = [(randint(0, 100), randint(0, 100))
+               for i in range(3)]
+    while True:
+        neighbors = assign(X, Y, centers)
+        new_centers = [adjust(c, n)
+                      for (c, n) in zip(centers, neighbors)]
+        # Stop if converged
+        if all([abs(n[0] - c[0]) &lt; EPSILON and
+                abs(n[1] - c[1]) &lt; EPSILON
+                for (n, c) in zip(new_centers, centers)]):
+            break
+        else:
+            centers = new_centers
             </code></pre>
           </section>
         </section>
