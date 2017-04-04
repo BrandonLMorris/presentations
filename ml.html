@@ -668,6 +668,100 @@ def main():
           </section>
         </section>
 
+        <!-- NEURAL NETWORKS -->
+        <section>
+          <section>
+            <h2>Artificial Nerual Networks</h2>
+          </section>
+          <section>
+            <h3>What is an ANN?</h3>
+            <ul>
+            <li>Inspired by the workings of human brain</li>
+            <li>Simple case theorized in the 60's</li>
+            <li>Popular in the 80's and 90's</li>
+            <li>Recent surge with <strong>deep learning</strong> techniques</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Representation</h3>
+            <img src="ml-img/ann-rep.png" style="background:white;width:50%">
+          </section>
+          <section>
+            <h3>Inside a Neuron</h3>
+            <ul>
+              <li>Each neuron contains a linear combination of inputs and weights</li>
+              <li>Final output given by a nonlinear "activation function"</li>
+              <li>Like doing simultaneous linear regressions that feed into each other</li>
+            </ul>
+            <br><br>
+            Output of top neron in first hidden layer:
+            <div style="text-align:center;">
+              $a_{i,j} = g(\Theta^{(1)}_{1,0}x_0 + \Theta^{(1)}_{1,1}x_1 + ... + \Theta^{(1)}_{1,n})$
+            </div>
+            <br>
+            Where there are $n$ inputs ang $g(\cdot)$ is a nonlinear activation function
+          </section>
+          <section>
+            Input layer is generally determined by the problem<br><br>
+            Layer outputs determined by number of neurons<br><br>
+            Output layer can be single neuron (binary), or multiple values
+          </section>
+          <section>
+            <h3>The activation function</h3>
+            Almost anything can be used, so long as its nonlinear<br><br>
+            Common functions include:
+            <ul>
+              <li>Logistic Sigmoid*: $g(x) = \frac{1}{1 + e^{-x}}$</li>
+              <li>ReLU: $g(x) = \max\{0, x\}$
+            </ul>
+          </section>
+          <section>
+            <h3>Training an ANN</h3>
+            ANNs learn with the backpropagation algorithm<br><br>
+            Intuition: If we can calculate the gratient of the network, we can use that and the error
+            to optimize via gradient descent<br><br>
+            Each layer is like a function: $h(x) = f_1(f_2(...f_n(x)...))$<br><br>
+            We can estimate the gradient with values of deeper layers
+          </section>
+          <section>
+            <h3>Backpropagation: The full algorithm*</h3>
+            <div style="text-align:left;">
+            Let $\Delta^{l}_{(i,j)} := 0$ for all $l, i, j$<br>
+            For training example $t=1..m$:<br>
+            &emsp;$a^{(1)}= x^{(t)}$<br>
+            &emsp;Perform forward propagation to determine $a^{(2)}..a^{(L)}$<br>
+            &emsp;$\delta^{(L)} = a^{(L)} - y^{(t)}$<br>
+            &emsp;$\delta^{(l)} = ((\Theta^{(l)})^T\delta^{l+1}) \cdot a^{(l)} \cdot (1 - a^{(l)})$ for $l=L-1..2$<br>
+            &emsp;$\Delta^{(l)}_{i,j} = \Delta^{(l)}_{i,j} + a_j^{(l)}\cdot\delta_i^{(l+1)}$<br>
+            $D^{(l)}_{i,j} = \frac{1}{m}\Delta{(l)}_{i,j} = \frac{\partial J(\Theta)}{\partial \Theta^{(l)}_{i,j}}$
+            </div>
+            <br><br><div style="font-size:25%">*Don't worry, most people don't understand this</div>
+          </section>
+          <section>
+            <h3>Deep Learning Variations</h3>
+          </section>
+          <section>
+            <h3>Convolutional Neural Networks</h3>
+            <img src="ml-img/conv-net.png">
+            Overlapping subsections of input are used<br><br>
+            Mixture of convolutional, max-pooling, and fully-connected layer<br><br>
+            Very useful in computer vision
+          </section>
+          <section>
+            <h3>Recurrent Neural Networks</h3>
+            <img src="ml-img/recurrent-network.gif"><br>
+            Neuron outputs can feed back into previous layers probabilistically<br><br>
+            Allows the network to "remember" things for short periods
+          </section>
+          <section>
+            <h3>Generative Adversarial Networks</h3>
+            <img src="ml-img/gan-network.png"><br>
+            Two networks trained simultaneously: one to generate similar data, the other
+            to discriminate real from fake data<br><br>
+            Can create amazingly real seeming data
+          </section>
+        </section>
+
         <section>
           <section>
             <h2>Where to Go from Here</h2>
