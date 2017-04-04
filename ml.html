@@ -696,10 +696,12 @@ def main():
             <br><br>
             Output of top neron in first hidden layer:
             <div style="text-align:center;">
-              $a_{i,j} = g(\Theta^{(1)}_{1,0}x_0 + \Theta^{(1)}_{1,1}x_1 + ... + \Theta^{(1)}_{1,n})$
+              $a^{(1)}_{1} = g(\Theta^{(1)}_{1,0}x_0 + \Theta^{(1)}_{1,1}x_1 + ... + \Theta^{(1)}_{1,n})$
             </div>
             <br>
             Where there are $n$ inputs ang $g(\cdot)$ is a nonlinear activation function
+            <br>
+            Often a bias unit, not depicted
           </section>
           <section>
             Input layer is generally determined by the problem<br><br>
@@ -733,7 +735,7 @@ def main():
             &emsp;$\delta^{(L)} = a^{(L)} - y^{(t)}$<br>
             &emsp;$\delta^{(l)} = ((\Theta^{(l)})^T\delta^{l+1}) \cdot a^{(l)} \cdot (1 - a^{(l)})$ for $l=L-1..2$<br>
             &emsp;$\Delta^{(l)}_{i,j} = \Delta^{(l)}_{i,j} + a_j^{(l)}\cdot\delta_i^{(l+1)}$<br>
-            $D^{(l)}_{i,j} = \frac{1}{m}\Delta{(l)}_{i,j} = \frac{\partial J(\Theta)}{\partial \Theta^{(l)}_{i,j}}$
+            $D^{(l)}_{i,j} = \frac{1}{m}\Delta^{(l)}_{i,j} = \frac{\partial J(\Theta)}{\partial \Theta^{(l)}_{i,j}}$
             </div>
             <br><br><div style="font-size:25%">*Don't worry, most people don't understand this</div>
           </section>
@@ -766,7 +768,7 @@ def main():
           <section>
             <h2>Where to Go from Here</h2>
           </section>
-          <section>
+          <!--section>
             <h3>Improvements</h3>
             More complex data (higher dimensions)
             <br><br>
@@ -785,7 +787,7 @@ def main():
             Artificial Neural Networks and Backpropagation
             <br><br>
             Deep Learning
-          </section>
+          </section-->
           <section>
             <h3>Further Study</h3>
             <strong>Coursera Machine Learning (Andrew Ng)**</strong>
@@ -793,6 +795,10 @@ def main():
             <i>Pattern Recognition and Machine Learning</i> by Christopher Bishop
             <br><br>
             <i>Deep Learning</i> by Ian Goodfellow, Yoshua Bengio, and Aaron Courville
+          </section>
+          <section>
+            All this code (including a ANN MNIST classifier) can be found
+            at my GitHub:<br><br> https://github.com/brandonlmorris
           </section>
         </section>
 
